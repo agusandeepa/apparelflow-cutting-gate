@@ -3,7 +3,7 @@
 Full-stack implementation of the **Production Batch Verification & Sewing Queue Gate**.
 No unverified, mismatched or short cutting batch can enter the Sewing Queue — enforced on the **server and in the database**, not in the browser.
 
-* **Live URL:** `<paste your Vercel URL here>`
+* **Live URL:** https://apparelflow-cutting-gate-d2od-pi.vercel.app
 * **Stack:** Next.js 15 (App Router) + TypeScript · PostgreSQL (Neon) via Drizzle ORM · JWT (httpOnly cookie) · Zod · Tailwind · Vitest
 
 ## Demo credentials
@@ -27,15 +27,17 @@ npm test             # 47 tests, runs against a real in-memory Postgres (PGlite)
 To use a real Postgres (Neon / Supabase):
 
 ```bash
-cp .env.example .env          # set DATABASE_URL and AUTH_SECRET (openssl rand -base64 48)
-npm run db:setup              # creates tables + triggers, seeds users and the 2 recipes (idempotent)
+# 1. create a .env file (copy .env.example) and set DATABASE_URL and AUTH_SECRET
+# 2. create tables + triggers and seed users and the 2 recipes (idempotent)
+npm run db:setup
 npm run dev
 ```
 
 ### Deploy (Vercel + Neon)
-1. Create a Neon project, copy the **pooled** connection string.
-2. Run `DATABASE_URL=... npm run db:setup` once from your machine.
+1. Create a Neon project and copy the **pooled** connection string (remove `channel_binding=require`, keep `?sslmode=require`).
+2. Put it in `.env` as `DATABASE_URL` (plus an `AUTH_SECRET`) and run `npm run db:setup` once from your machine.
 3. Import the GitHub repo in Vercel and set env vars `DATABASE_URL` and `AUTH_SECRET`.
+4. In Vercel, Settings > Deployment Protection, turn **Vercel Authentication** off so the site is public.
 
 ## Architecture
 
