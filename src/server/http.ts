@@ -29,7 +29,7 @@ export function clearSessionCookie(res: NextResponse) {
   res.cookies.set({ name: COOKIE_NAME, value: "", httpOnly: true, sameSite: "lax", path: "/", maxAge: 0 });
 }
 
-/** DB trigger violations (backstop) are reported as 422 instead of a generic 500. */
+
 function dbRuleViolation(e: unknown): string | null {
   const msgs = [(e as Error)?.message, (e as { cause?: Error })?.cause?.message].filter(Boolean) as string[];
   for (const m of msgs) {
