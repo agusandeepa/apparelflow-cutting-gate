@@ -168,7 +168,7 @@ The project uses Vitest for automated testing and PGlite to run tests against a 
 * Test files passed: 7
 * Tests passed: 47
 
-![Automated test results](docs/test-results.png)
+![Automated test results](test-result-png.png)
 
 The tests cover:
 
