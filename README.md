@@ -163,6 +163,13 @@ npm run dev
 
 The project uses Vitest for automated testing and PGlite to run tests against a PostgreSQL-compatible database with the project's actual schema and triggers.
 
+**Latest test results:**
+
+* Test files passed: 7
+* Tests passed: 47
+
+![Automated test results](docs/test-results.png)
+
 The tests cover:
 
 * Approval of valid cutting batches.
@@ -183,6 +190,7 @@ src/
 │   ├── api/      # API route handlers
 │   └── (app)/    # Role-specific application screens
 ├── db/           # Database schema, setup, and seed data
+
 tests/            # Automated tests
 ```
 
