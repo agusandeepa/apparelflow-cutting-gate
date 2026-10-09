@@ -1,6 +1,5 @@
 import type { Role } from "@/db/schema";
 
-// Public demo credentials (also listed in README + shown on the login screen).
 export const DEMO_USERS: { role: Role; label: string; fullName: string; email: string; password: string; home: string }[] = [
   { role: "cutting_supervisor", label: "Cutting Supervisor", fullName: "Nimali Perera",  email: "supervisor@apparelflow.demo", password: "Supervisor@123", home: "/supervisor" },
   { role: "cutting_verifier",   label: "Cutting Verifier",   fullName: "Kasun Fernando", email: "verifier@apparelflow.demo",   password: "Verifier@123",   home: "/verifier" },

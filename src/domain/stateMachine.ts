@@ -1,12 +1,7 @@
 import type { OrderStatus } from "@/db/schema";
 import { HttpError } from "@/server/errors";
 
-/**
- * IN_PROGRESS --submit--> PENDING_VERIFICATION --approve--> VERIFIED (terminal)
- *                                   |
- *                                   +--reject--> REJECTED --resubmit--> PENDING_VERIFICATION
- * (the same table is enforced again by a Postgres trigger)
- */
+
 export const TRANSITIONS: Record<OrderStatus, readonly OrderStatus[]> = {
   IN_PROGRESS: ["PENDING_VERIFICATION"],
   PENDING_VERIFICATION: ["VERIFIED", "REJECTED"],

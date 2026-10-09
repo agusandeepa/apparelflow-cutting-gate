@@ -65,7 +65,6 @@ export async function loadItems(db: DB, orderIds: number[]): Promise<Map<number,
   return map;
 }
 
-/** Most recent REJECTED log per order (used to show the supervisor why a batch came back). */
 export async function loadLatestRejections(db: DB, orderIds: number[]): Promise<Map<number, NonNullable<OrderView["latestRejection"]>>> {
   const map = new Map<number, NonNullable<OrderView["latestRejection"]>>();
   if (orderIds.length === 0) return map;

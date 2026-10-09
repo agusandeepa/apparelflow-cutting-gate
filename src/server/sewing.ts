@@ -9,10 +9,6 @@ const creator = alias(users, "creator");
 const verifier = alias(users, "verifier");
 const starter = alias(users, "starter");
 
-/**
- * Sewing Queue. Takes NO client input: the filter `status = 'VERIFIED'` is hard-coded in the SQL,
- * so query-string / body manipulation cannot leak pending, rejected or in-progress orders.
- */
 export async function sewingQueue(ctx: Ctx) {
   requireRole(ctx, "sewing_supervisor");
 
@@ -57,7 +53,7 @@ export async function startSewing(ctx: Ctx, id: number) {
     .where(and(eq(cuttingOrders.id, id), eq(cuttingOrders.status, "VERIFIED"), isNull(cuttingOrders.sewingStartedAt)))
     .returning({ id: cuttingOrders.id, startedAt: cuttingOrders.sewingStartedAt });
   if (!row) {
-    // either not VERIFIED (never reveal that it exists) or already started
+
     const [o] = await ctx.db.select({ status: cuttingOrders.status, started: cuttingOrders.sewingStartedAt })
       .from(cuttingOrders).where(and(eq(cuttingOrders.id, id), eq(cuttingOrders.status, "VERIFIED")));
     if (o?.started) throw new HttpError(422, "Sewing has already been started for this batch");

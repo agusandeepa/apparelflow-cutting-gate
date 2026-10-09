@@ -1,8 +1,6 @@
 import type { PgDatabase } from "drizzle-orm/pg-core";
 import * as schema from "./schema";
 
-// Works for node-postgres (Neon/Supabase/any Postgres) AND PGlite (embedded Postgres for local dev + tests).
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type DB = PgDatabase<any, typeof schema>;
 export { schema };
 
@@ -22,7 +20,6 @@ async function create(): Promise<DB> {
     throw new Error("DATABASE_URL is required in production");
   }
 
-  // Local dev without any setup: embedded Postgres persisted to ./.data/pglite
   const { PGlite } = await import("@electric-sql/pglite");
   const { drizzle } = await import("drizzle-orm/pglite");
   const { applySchema } = await import("./migrate");
@@ -39,7 +36,7 @@ async function create(): Promise<DB> {
 
 export function getDb(): Promise<DB> {
   if (!g.__afDb) {
-    // if initialisation fails, forget the rejected promise so the next request retries instead of failing forever
+
     g.__afDb = create().catch((e) => { g.__afDb = undefined; throw e; });
   }
   return g.__afDb;

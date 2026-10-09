@@ -1,5 +1,4 @@
-/* Usage: DATABASE_URL=postgres://... npm run db:setup
-   Creates tables, triggers and seeds demo users + recipes (idempotent). */
+
 import { Pool } from "pg";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { applySchema } from "../src/db/migrate";
@@ -11,7 +10,7 @@ async function main() {
   if (!url) throw new Error("Set DATABASE_URL first (see .env.example)");
   const pool = new Pool({ connectionString: url });
   await applySchema((sql) => pool.query(sql));
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   await seedDatabase(drizzle(pool, { schema }) as any);
   await pool.end();
   console.log("Database ready: schema applied + demo data seeded.");

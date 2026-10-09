@@ -1,9 +1,7 @@
 @import "tailwindcss";
 
-/* ---------- Design tokens: warm "cutting-room paper" + ink, all text >= WCAG AA (most AAA) ---------- */
 :root {
-  color-scheme: light;               /* stops dark-mode browsers from turning inputs white-on-white */
-  --paper: #f4f1e8;
+  color-scheme: light;               
   --card: #ffffff;
   --ink: #14181d;
   --ink-2: #39414b;
@@ -21,7 +19,6 @@ body {
 }
 .font-num { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-variant-numeric: tabular-nums; }
 
-/* ---------- ZERO-TOLERANCE: every form control is dark text on a white background in every state ---------- */
 input, select, textarea {
   display: block; width: 100%;
   background-color: #ffffff !important;
@@ -55,7 +52,6 @@ label { color: var(--ink); font-weight: 600; font-size: 0.9rem; }
 .field-error { color: #8a1212; font-weight: 600; font-size: 0.875rem; margin-top: 0.25rem; display: flex; gap: 0.35rem; }
 .field-hint { color: var(--ink-2); font-size: 0.8rem; margin-top: 0.25rem; }
 
-/* ---------- Buttons ---------- */
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
   border-radius: 6px; padding: 0.55rem 1rem; font-weight: 700; font-size: 0.95rem;

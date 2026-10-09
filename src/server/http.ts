@@ -4,7 +4,6 @@ import type { Ctx } from "./context";
 import { HttpError } from "./errors";
 import { COOKIE_NAME, SESSION_SECONDS, sessionFromToken, tokenFromCookieHeader } from "./auth";
 
-/** Parse a JSON body. Non-JSON content types and malformed JSON are rejected (also a CSRF hardening). */
 export async function readJson(req: Request): Promise<unknown> {
   const ct = req.headers.get("content-type") ?? "";
   if (!ct.toLowerCase().includes("application/json")) throw new HttpError(415, "Content-Type must be application/json");
@@ -41,7 +40,6 @@ function dbRuleViolation(e: unknown): string | null {
 
 type Handler = (ctx: Ctx, req: Request) => Promise<unknown | NextResponse>;
 
-/** Builds the request context (DB + session derived from the httpOnly cookie) and maps errors to JSON. */
 export async function handle(req: Request, fn: Handler, successStatus = 200): Promise<NextResponse> {
   try {
     const db = await getDb();

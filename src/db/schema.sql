@@ -1,4 +1,3 @@
--- ApparelFlow ERP : Cutting Gate schema (idempotent, safe to run many times)
 
 CREATE TABLE IF NOT EXISTS users (
   id            SERIAL PRIMARY KEY,
@@ -73,14 +72,10 @@ CREATE TABLE IF NOT EXISTS verification_logs (
   "timestamp"         TIMESTAMPTZ NOT NULL DEFAULT now(),
   CHECK (decision <> 'REJECTED' OR length(trim(coalesce(rejection_note, ''))) >= 5)
 );
--- at most ONE approval per order, ever
+
 CREATE UNIQUE INDEX IF NOT EXISTS uq_one_approval_per_order
   ON verification_logs(order_id) WHERE decision = 'APPROVED';
 
--- ---------------------------------------------------------------------------
--- DEFENCE IN DEPTH: even if application code is buggy, the database refuses
--- illegal state changes.
--- ---------------------------------------------------------------------------
 
 -- 1. Audit log is append-only (immutable).
 CREATE OR REPLACE FUNCTION forbid_log_mutation() RETURNS trigger AS $$

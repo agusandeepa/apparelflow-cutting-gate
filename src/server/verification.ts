@@ -42,8 +42,6 @@ async function terminalView(db: DB | Tx, id: number) {
   const order = toOrderView(row.order, row.recipe, row.creatorName);
   return { order, items, summary: summarize(items) };
 }
-
-/** Lock the order row and make sure it is awaiting verification. */
 async function lockPending(tx: Tx, id: number) {
   const [row] = await tx
     .select({ order: cuttingOrders, recipe: recipes })
@@ -72,12 +70,10 @@ function toVariances(rows: Awaited<ReturnType<typeof loadRawItems>>): ComponentV
     componentId: item.componentId, componentName: name, expected: item.expectedQty,
     actual: item.actualQty,
     variance: item.actualQty === null ? null : item.actualQty - item.expectedQty,
-    // status is RE-COMPUTED here; the stored value is never trusted
+
     status: item.actualQty === null ? null : trafficLight(item.expectedQty, item.actualQty),
   }));
 }
-
-/** Verifier work list: orders waiting at the QC station. */
 export async function verifierQueue(ctx: Ctx) {
   requireRole(ctx, "cutting_verifier");
   const rows = await ctx.db
@@ -103,7 +99,6 @@ export async function getTerminal(ctx: Ctx, id: number) {
   return v;
 }
 
-/** Save physical counts. Traffic-light status is computed HERE from expected vs actual; clients cannot set it. */
 export async function saveCounts(ctx: Ctx, id: number, body: unknown) {
   const s = requireRole(ctx, "cutting_verifier");
   const input = parseBody(saveCountsSchema, body);
@@ -125,12 +120,6 @@ export async function saveCounts(ctx: Ctx, id: number, body: unknown) {
   });
   return terminalView(ctx.db, id);
 }
-
-/**
- * HARD STOP. Approval is only possible when EVERY component is counted and none is RED.
- * Everything is re-derived from the database inside one transaction; nothing from the client is trusted
- * (verifier id + timestamp come from the session / DB clock).
- */
 export async function approve(ctx: Ctx, id: number, body: unknown) {
   const s = requireRole(ctx, "cutting_verifier");
   const input = parseBody(approveSchema, body);
@@ -176,7 +165,6 @@ export async function approve(ctx: Ctx, id: number, body: unknown) {
   });
 }
 
-/** Reject with a MANDATORY reason; batch returns to the supervisor for re-cutting. */
 export async function reject(ctx: Ctx, id: number, body: unknown) {
   const s = requireRole(ctx, "cutting_verifier");
   const input = parseBody(rejectSchema, body);

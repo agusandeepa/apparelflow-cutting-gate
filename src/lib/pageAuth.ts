@@ -11,7 +11,6 @@ export async function currentUser() {
   return sessionFromToken(db, token);
 }
 
-/** UX-level page guard only. The real security boundary is requireRole() inside every API/service call. */
 export async function requirePageRole(role: Role) {
   const u = await currentUser();
   if (!u) redirect("/login");
